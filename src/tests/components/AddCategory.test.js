@@ -1,11 +1,17 @@
 import React from 'react';
+import '@testing-library/jest-dom';
 import { shallow } from 'enzyme';
 import { AddCategory } from '../../components/AddCategory';
 
 describe('Pruebas eb <AddCategory />', () => {
 
-    const setCategories = () => { };
-    const wrapper = shallow(<AddCategory setCategories={setCategories} />)
+    const setCategories = jest.fn();
+    let wrapper = shallow(<AddCategory setCategories={setCategories} />);
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        wrapper = shallow(<AddCategory setCategories={setCategories} />);
+    })
 
     test('Debe de mostrar correctamente el componente', () => {
         expect(wrapper).toMatchSnapshot();
@@ -17,6 +23,11 @@ describe('Pruebas eb <AddCategory />', () => {
         const p = wrapper.find('p').text();
         expect(p.trim()).toBe(value);
     });
+    test('No debe de postear la informacion on submit', () => {
+        wrapper.find('form').simulate('submit', { preventDefault() { } });
+        expect(setCategories).not.toHaveBeenCalled();
+    });
+
 
 
 });
